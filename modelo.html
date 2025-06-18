@@ -1,226 +1,413 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Propaganda com Vídeo, Redirecionamento e Fechamento Temporizado</title>
-  <meta name="description" content="Assista ao vídeo e descubra oportunidades incríveis de crédito, consórcio e muito mais. Feche após 10 segundos.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loja Elegante - Produtos em Destaque</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-    }
-
-    #promo {
+        #iframe-wrapper {
       position: fixed;
       bottom: 0;
       right: 0;
       width: 100%;
-      max-width: 420px;
-      background-color: #fff;
-      border-top-left-radius: 10px;
-      box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      height: 50vh; /* Altura relativa no desktop */
+      max-height: 400px;
       z-index: 9999;
-      padding: 15px;
-    }
-
-    .responsive-video {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: none;
-      border-radius: 8px;
-      display: block;
-    }
-
-    #promoLink {
-      display: block;
-      margin-top: 12px;
-      padding: 10px;
-      background-color: #0056b3;
-      color: #fff;
-      text-align: center;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 5px;
-    }
-
-    #promoLink:hover {
-      background-color: #00449e;
-    }
-
-    #closeMessage {
-      text-align: center;
-      color: #555;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    #promoCloseBtn {
-      margin: 15px auto 0 auto;
-      display: none;
+      border-radius: 10px 0 0 0;
+      box-shadow: -2px -2px 12px rgba(0,0,0,0.3);
+      background-color: #fff;
+      overflow: hidden;
+      display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #e74c3c;
+    }
+
+    #iframe-fixo {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px 0 0 0;
+      display: block;
+    }
+
+    #close-btn {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.7);
       color: #fff;
       border: none;
-      border-radius: 50px;
-      font-size: 16px;
-      width: 100%;
-      padding: 10px;
-      cursor: not-allowed;
-    }
-
-    #promoCloseBtn.enabled {
+      border-radius: 50%;
+      font-size: 20px;
+      width: 32px;
+      height: 32px;
       cursor: pointer;
+      line-height: 32px;
+      text-align: center;
+      z-index: 10000;
+      display: none; /* Escondido inicialmente */
+      transition: background-color 0.3s ease;
     }
 
-    #promoCloseBtn span {
-      margin-left: 8px;
+    #close-btn:hover {
+      background: rgba(255, 0, 0, 0.8);
     }
 
-    @media (max-width: 500px) {
-      #promo {
-        width: 100%;
+    /* MOBILE */
+    @media (max-width: 600px) {
+      #iframe-wrapper {
+        max-width: 100%;
+        height: 400px; /* Altura fixa menor */
         border-radius: 0;
         left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      #iframe-fixo {
+        border-radius: 0;
+      }
+
+      #close-btn {
+        top: 6px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+        line-height: 28px;
+      }
+    }
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #f5f7fa;
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+      color: #0077cc;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .slideshow-container {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .slide {
+      display: none;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .slide.active {
+      display: block;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    .slide img {
+      max-width: 100%;
+      max-height: 320px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      object-fit: cover;
+    }
+
+    .slide img:hover {
+      transform: scale(1.05);
+    }
+
+    .slide h2 {
+      margin: 20px 0 10px;
+      font-size: 1.9rem;
+      color: #004a99;
+    }
+
+    .slide p {
+      color: #555;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Botões anterior e próximo */
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      z-index: 10;
+    }
+
+    .prev:hover, .next:hover {
+      background-color: #005fa3;
+    }
+
+    .prev {
+      left: 15px;
+    }
+
+    .next {
+      right: 15px;
+    }
+
+    /* Dots de navegação */
+    .dots {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .dot {
+      height: 14px;
+      width: 14px;
+      margin: 0 8px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .dot.active, .dot:hover {
+      background-color: #0077cc;
+    }
+
+    /* Responsividade */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .slide h2 {
+        font-size: 1.4rem;
+      }
+      .slide p {
+        font-size: 1rem;
+      }
+      .prev, .next {
+        width: 38px;
+        height: 38px;
+        font-size: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
 
-<div id="promo" role="region" aria-label="Propaganda">
-  <iframe
-    class="responsive-video"
-    src="https://www.youtube.com/embed/gBclanEnn88?si=IqcWS27KWsGxKPsL"
-    title="YouTube Video Player"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen>
-  </iframe>
+  <h1>Produtos em Destaque</h1>
 
-  <!-- Link com texto e URL definidos dinamicamente ao carregar -->
-  <a id="promoLink" href="#" target="_blank">
-    CARREGANDO...
+  <div class="slideshow-container">
+
+    <div class="slide active">
+      <a href="https://central.dokehost.com.br/aff.php?aff=90">
+      <img src="produto.jpg" alt="Relógio Moderno" />
+      <h2>MÁQUINAS VPS TEMOS TODAS AS OPÇÕES DE MÁQINAS PARA VOCÊ</h2>
+      <p>vps melhor custo!.</p>
+    </div>
   </a>
 
-  <div id="closeMessage">Em 10 segundos você pode fechar a propaganda</div>
+    <div class="slide">
+      <a href="https://central.dokehost.com.br/aff.php?aff=90">
 
-  <button id="promoCloseBtn" aria-label="Fechar propaganda" title="Fechar propaganda">
-    × <span>Fechar Propaganda</span>
-  </button>
+        <img src="produto.jpg" alt="Fones de Ouvido Wireless" />
+      <h2>vps o melhor custo</h2>
+      <p>MÁQUINAS VPS TEMOS TODAS AS OPÇÕES DE MÁQINAS PARA VOCÊ</p>
+    </div>
+      </a>
+
+
+
+         <div class="slide">
+      <a href="https://central.dokehost.com.br/aff.php?aff=90">
+
+        <img src="produto.jpg" alt="Fones de Ouvido Wireless" />
+      <h2>vps o melhor custo</h2>
+      <p>MÁQUINAS VPS TEMOS TODAS AS OPÇÕES DE MÁQINAS PARA VOCÊ</p>
+    </div>
+      </a>
+
+
+
+
+      
+
+         <div class="slide">
+      <a href="https://www.airbnb.com.br/r/saibvictore?s=6&t=061n0g">
+
+        <img src="produto.jpg" alt="Fones de Ouvido Wireless" />
+      <h2>Comece no Airbnb hoje mesmo</h2>
+      <p></p>
+    </div>
+      </a>
+      
+
+
+      
+         <div class="slide">
+      <a href="https://hostinger.com.br/?REFERRALCODE=1VICTOR444">
+
+        <img src="produto.jpg" alt="Fones de Ouvido Wireless" />
+      <h2>Crie seu site agora mesmo não perca tempo</h2>
+      <p></p>
+    </div>
+      </a>
+
+
+       <div class="slide">
+      <a href="https://brasilbrasileiross.blogspot.com/">
+
+        <img src="produto.jpg" alt="Fones de Ouvido Wireless" />
+      <h2>A VOZ DO BRASIL</h2>
+      <p></p>
+    </div>
+      </a>
+      
+
+
+      <div class="slide">
+      <a href="https://linharesesd.blogspot.com/">
+
+        <img src="produto.jpg" alt="Fones de Ouvido Wireless" />
+      <h2>O PORTAL DE LINHARES ES</h2>
+      <p></p>
+    </div>
+      </a>
+      
+
+      <div class="slide">
+      <a href="https://recomendadodia23.blogspot.com/">
+
+        <img src="produto.jpg" alt="Fones de Ouvido Wireless" />
+      <h2>RECOMENDAÇÃO DO DIA</h2>
+      <p></p>
+    </div>
+      </a>
+      
+      
+
+
+
+    <!-- Controles -->
+    <button class="prev" aria-label="Slide anterior">&#10094;</button>
+    <button class="next" aria-label="Próximo slide">&#10095;</button>
+
+  </div>
+
+  <div class="dots" aria-label="Indicadores de slide">
+    <span class="dot active" tabindex="0" aria-label="Slide 1"></span>
+    <span class="dot" tabindex="0" aria-label="Slide 2"></span>
+    <span class="dot" tabindex="0" aria-label="Slide 3"></span>
+    <span class="dot" tabindex="0" aria-label="Slide 4"></span>
+    <span class="dot" tabindex="0" aria-label="Slide 5"></span>
+    <span class="dot" tabindex="0" aria-label="Slide 6"></span>
+    <span class="dot" tabindex="0" aria-label="Slide 7"></span>
+ 
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    const dots = document.querySelectorAll('.dot');
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      if (index >= slides.length) index = 0;
+      if (index < 0) index = slides.length - 1;
+
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+
+      slides[index].classList.add('active');
+      dots[index].classList.add('active');
+      currentIndex = index;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      showSlide(currentIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      showSlide(currentIndex + 1);
+    });
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => showSlide(idx));
+      dot.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showSlide(idx);
+        }
+      });
+    });
+
+    // Auto-slide a cada 6 segundos
+    setInterval(() => {
+      showSlide(currentIndex + 1);
+    }, 6000);
+  </script>
+
+
+
+<div id="iframe-wrapper" role="region" aria-label="Anúncio fixo">
+  <button id="close-btn" aria-label="Fechar anúncio">×</button>
+  <iframe
+    id="iframe-fixo"
+    src="modelo.html"
+    title="Anúncio Fixo Responsivo"
+    loading="lazy"
+    ></iframe>
 </div>
 
 <script>
-  const promoOptions = [
-    {
-      url: "https://wa.me/5527999497001",
-      text: "CONFIRA SEGUROS E ETC TEMOS AS MELHORES OPÇÕES"
-    },
-    {
-      url: "https://geocredibnkvitoria.com/",
-      text: "CRÉDITO PESSOAL DISPONÍVEL! FAÇA UMA SIMULAÇÃO GRATUITA."
-    },
-    {
-      url: "https://central.dokehost.com.br/aff.php?aff=90",
-      text: "CONFIRA ESSAS OPORTUNIDADES AGORA MESMO! → VPS MÁQUINA MELHOR PREÇO"
-    },
-    {
-      url: "https://www.larissasaib.com.br/",
-      text: "ESTÁ FICANDO CARECA NOS TEMOS A SOLUÇÃO"
-    },
-      {
-      url: "https://hostinger.com.br?REFERRALCODE=SSNVICTORXU8",
-      text: "HOSPEDAGEM DE SITE BARATO CONFIRA"
-    },
-        {
-      url: "https://www.espiritosanto-es.com.br/",
-      text: "CONFIRA ESSE CONTEÚDO DE ALTA QUALIDADE"
-    },
+  // Espera 10 segundos para exibir o botão de fechar
+  setTimeout(() => {
+    document.getElementById("close-btn").style.display = "block";
+  }, 10000);
 
-    {
-      url: "https://filmeseserie.com.br/empresa/",
-      text: "CONFIRA ESSAS EMPRESAS AQUI"
-    },
-
-    {
-      url: "https://jogosantigos472302513.wordpress.com/",
-      text: "TUDO SOBRE GAMES"
-    },
-    {
-      url: "https://brasilbrasileiross.blogspot.com/",
-      text: "portal do brasil"
-    },
-    {
-      url: "https://oscriadoresmaisengracadoskdj.blogspot.com/",
-      text: "os criadores de youtube mais engraçados do youtube"
-    },
-    {
-      url: "https://horavoo-git-main-victorsaibs-projects.vercel.app/",
-      text: "horário de voos descubra"
-    },
-    {
-      url: "https://bibliadonline.netlify.app/",
-      text: "versiculos biblicos confira"
-    },
-    {
-      url: "https://bibliadonline.netlify.app/",
-      text: "versiculos biblicos confira"
-    },
-      {
-      url: "https://shrtfly.com/ref/xxvitaoxx",
-      text: "Ganhe dinheiro compartilhando links"
-    },
-     {
-      url: "https://ocomerciobrasileironoticia.blogspot.com/",
-      text: "ERP PARA EMPRESAS CONFIRA! "
-    },
-     {
-      url: "https://www.airbnb.com.br/r/saibvictore?s=6&t=061n0g",
-      text: "Comece no Airbnb hoje mesmo! "
-    },
-      {
-      url: "https://guaraparilinhadotempo.vercel.app/",
-      text: "linha do tempo guarapari es "
-    },
-    {
-      url: "https://linhadotempoguarapari.netlify.app/",
-      text: "LINHA DO TEMPO GUARAPARI ES "
-    },
-  ];
-
-  window.addEventListener("DOMContentLoaded", () => {
-    const choice = promoOptions[Math.floor(Math.random() * promoOptions.length)];
-    const link = document.getElementById("promoLink");
-
-    // Define o link e o texto corretamente uma vez só
-    link.href = choice.url;
-    link.textContent = choice.text;
-
-    // Botão de fechar ativado após 10s
-    const closeMessage = document.getElementById("closeMessage");
-    const closeBtn = document.getElementById("promoCloseBtn");
-    let closeBtnEnabled = false;
-
-    setTimeout(() => {
-      closeMessage.textContent = "Agora você pode fechar a propaganda.";
-      closeBtn.style.display = "flex";
-      closeBtn.classList.add("enabled");
-      closeBtn.style.cursor = "pointer";
-      closeBtnEnabled = true;
-    }, 10000);
-
-    closeBtn.addEventListener("click", (e) => {
-      if (!closeBtnEnabled) {
-        e.preventDefault();
-        alert("Você só pode fechar a propaganda após 10 segundos.");
-        return false;
-      }
-      document.getElementById("promo").style.display = "none";
-    });
+  // Ação do botão para fechar o iframe
+  document.getElementById("close-btn").addEventListener("click", () => {
+    document.getElementById("iframe-wrapper").style.display = "none";
   });
 </script>
-
 </body>
 </html>
