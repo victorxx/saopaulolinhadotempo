@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propaganda com Vídeo, Redirecionamento e Fechamento Temporizado</title>
+  <meta name="description" content="Assista ao vídeo e descubra oportunidades incríveis de crédito, consórcio e muito mais. Feche após 10 segundos.">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    #promo {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      max-width: 420px;
+      background-color: #fff;
+      border-top-left-radius: 10px;
+      box-shadow: -2px -2px 10px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      padding: 15px;
+    }
+
+    .responsive-video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      border-radius: 8px;
+      display: block;
+    }
+
+    #promoLink {
+      display: block;
+      margin-top: 12px;
+      padding: 10px;
+      background-color: #0056b3;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+
+    #promoLink:hover {
+      background-color: #00449e;
+    }
+
+    #closeMessage {
+      text-align: center;
+      color: #555;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    #promoCloseBtn {
+      margin: 15px auto 0 auto;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      width: 100%;
+      padding: 10px;
+      cursor: not-allowed;
+    }
+
+    #promoCloseBtn.enabled {
+      cursor: pointer;
+    }
+
+    #promoCloseBtn span {
+      margin-left: 8px;
+    }
+
+    @media (max-width: 500px) {
+      #promo {
+        width: 100%;
+        border-radius: 0;
+        left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="promo" role="region" aria-label="Propaganda">
+  <iframe
+    class="responsive-video"
+    src="https://www.youtube.com/embed/gBclanEnn88?si=IqcWS27KWsGxKPsL"
+    title="YouTube Video Player"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+
+  <!-- Link com texto e URL definidos dinamicamente ao carregar -->
+  <a id="promoLink" href="#" target="_blank">
+    CARREGANDO...
+  </a>
+
+  <div id="closeMessage">Em 10 segundos você pode fechar a propaganda</div>
+
+  <button id="promoCloseBtn" aria-label="Fechar propaganda" title="Fechar propaganda">
+    × <span>Fechar Propaganda</span>
+  </button>
+</div>
+
+<script>
+  const promoOptions = [
+    {
+      url: "https://wa.me/5527999497001",
+      text: "CONFIRA SEGUROS E ETC TEMOS AS MELHORES OPÇÕES"
+    },
+    {
+      url: "https://geocredibnkvitoria.com/",
+      text: "CRÉDITO PESSOAL DISPONÍVEL! FAÇA UMA SIMULAÇÃO GRATUITA."
+    },
+    {
+      url: "https://central.dokehost.com.br/aff.php?aff=90",
+      text: "CONFIRA ESSAS OPORTUNIDADES AGORA MESMO! → VPS MÁQUINA MELHOR PREÇO"
+    },
+    {
+      url: "https://www.larissasaib.com.br/",
+      text: "ESTÁ FICANDO CARECA NOS TEMOS A SOLUÇÃO"
+    },
+      {
+      url: "https://hostinger.com.br?REFERRALCODE=SSNVICTORXU8",
+      text: "HOSPEDAGEM DE SITE BARATO CONFIRA"
+    },
+        {
+      url: "https://www.espiritosanto-es.com.br/",
+      text: "CONFIRA ESSE CONTEÚDO DE ALTA QUALIDADE"
+    },
+
+    {
+      url: "https://filmeseserie.com.br/empresa/",
+      text: "CONFIRA ESSAS EMPRESAS AQUI"
+    },
+
+    {
+      url: "https://jogosantigos472302513.wordpress.com/",
+      text: "TUDO SOBRE GAMES"
+    },
+    {
+      url: "https://brasilbrasileiross.blogspot.com/",
+      text: "portal do brasil"
+    },
+    {
+      url: "https://oscriadoresmaisengracadoskdj.blogspot.com/",
+      text: "os criadores de youtube mais engraçados do youtube"
+    },
+    {
+      url: "https://horavoo-git-main-victorsaibs-projects.vercel.app/",
+      text: "horário de voos descubra"
+    },
+    {
+      url: "https://bibliadonline.netlify.app/",
+      text: "versiculos biblicos confira"
+    },
+    {
+      url: "https://bibliadonline.netlify.app/",
+      text: "versiculos biblicos confira"
+    },
+      {
+      url: "https://shrtfly.com/ref/xxvitaoxx",
+      text: "Ganhe dinheiro compartilhando links"
+    },
+     {
+      url: "https://ocomerciobrasileironoticia.blogspot.com/",
+      text: "ERP PARA EMPRESAS CONFIRA! "
+    },
+     {
+      url: "https://www.airbnb.com.br/r/saibvictore?s=6&t=061n0g",
+      text: "Comece no Airbnb hoje mesmo! "
+    },
+      {
+      url: "https://guaraparilinhadotempo.vercel.app/",
+      text: "linha do tempo guarapari es "
+    },
+    {
+      url: "https://linhadotempoguarapari.netlify.app/",
+      text: "LINHA DO TEMPO GUARAPARI ES "
+    },
+  ];
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const choice = promoOptions[Math.floor(Math.random() * promoOptions.length)];
+    const link = document.getElementById("promoLink");
+
+    // Define o link e o texto corretamente uma vez só
+    link.href = choice.url;
+    link.textContent = choice.text;
+
+    // Botão de fechar ativado após 10s
+    const closeMessage = document.getElementById("closeMessage");
+    const closeBtn = document.getElementById("promoCloseBtn");
+    let closeBtnEnabled = false;
+
+    setTimeout(() => {
+      closeMessage.textContent = "Agora você pode fechar a propaganda.";
+      closeBtn.style.display = "flex";
+      closeBtn.classList.add("enabled");
+      closeBtn.style.cursor = "pointer";
+      closeBtnEnabled = true;
+    }, 10000);
+
+    closeBtn.addEventListener("click", (e) => {
+      if (!closeBtnEnabled) {
+        e.preventDefault();
+        alert("Você só pode fechar a propaganda após 10 segundos.");
+        return false;
+      }
+      document.getElementById("promo").style.display = "none";
+    });
+  });
+</script>
+
+</body>
+</html>
