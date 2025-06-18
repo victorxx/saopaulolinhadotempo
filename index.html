@@ -23,9 +23,12 @@
   --color-link-hover: #003f7d;
   --radius: 6px;
   --shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --transition-speed: 0.3s;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -37,100 +40,118 @@ body {
   padding: 0;
   line-height: 1.6;
   font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 header {
   background-color: var(--color-heading);
   color: #fff;
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem;
 }
 
 header h1 {
   margin: 0;
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   letter-spacing: 0.5px;
+  font-weight: 700;
 }
 
 main {
-  max-width: 960px;
-  margin: 2rem auto;
+  max-width: 100%;
+  margin: 1.5rem auto;
   padding: 0 1rem;
 }
 
 article {
   background-color: #fff;
-  padding: 1.5rem 1.75rem;
-  margin-bottom: 2rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow var(--transition-speed) ease, transform var(--transition-speed) ease;
 }
 
-article:hover {
+article:hover,
+article:focus-within {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
 }
 
 article h2 {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   margin: 0 0 0.5rem;
   color: var(--color-heading);
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 article time {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--color-muted);
   margin-bottom: 1rem;
+  font-style: normal;
 }
 
 article p {
   margin: 0;
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.5;
+  color: var(--color-text);
 }
 
 a {
   color: var(--color-link);
   text-decoration: none;
+  transition: color var(--transition-speed) ease;
 }
 
 a:hover h2,
 a:focus h2 {
   text-decoration: underline;
   color: var(--color-link-hover);
+  outline: none;
 }
 
 footer {
   text-align: center;
-  padding: 2rem 1rem;
-  font-size: 0.9rem;
+  padding: 1.5rem 1rem;
+  font-size: 0.85rem;
   color: var(--color-muted);
 }
 
-@media (max-width: 600px) {
+/* Media Queries: mobile first - a partir de tablets maiores */
+@media (min-width: 600px) {
   header h1 {
-    font-size: 2rem;
-  }
-
-  article h2 {
-    font-size: 1.3rem;
+    font-size: 2.5rem;
   }
 
   main {
-    padding: 0 0.75rem;
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  article {
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  article h2 {
+    font-size: 1.6rem;
+  }
+
+  article p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  footer {
+    font-size: 0.9rem;
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
